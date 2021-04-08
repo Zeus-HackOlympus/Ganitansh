@@ -13,9 +13,14 @@ from threading import Timer
 from colorama import Fore, Back, Style, init
 import cv2
 
+#def story():
+
+
+
 def speak(text):
     eng.say(text)
     eng.runandwait()
+
 
 
 def basic():
@@ -26,13 +31,20 @@ def basic():
     speak('You will have 60 seconds to attempt each question')
     while True:
         time.sleep(1)
+        print(Fore.GREEN + Back.BLACK + """1 --> Double Digit Multiplication
+         2 --> Multiplication of a two-digit number by 11
+         3--> Finding square of double digit numbers ending with 5
+         4 --> Go Back""")
+        speak('Type one of the following options. 1 Double Digit Multiplication; 2 Multiplication by number of the form 11; 3 Go Back')
+        
         print(Fore.GREEN + Back.BLACK + "1 --> Double Digit Multiplication; 2 --> Multiplication of a two-digit number by 11... ; 3 --> Go Back")
         speak('Type one of the following options. 1 Double Digit Multiplication; 2 Multiplication by number of the form 11; 3 Go Back')
         print( Fore.GREEN + Back.BLACK +"Choose one of the following options.")
         choice = int(input())
         if choice== 1: dd()
         if choice== 2: elev()
-        if choice== 3: break
+        if choice==3: sqr5()
+        if choice== 4: break
 
 def dd():
     print(Back.BLACK +'Do you know about various tricks which are given by Vedic Maths?')
@@ -109,6 +121,92 @@ The number that you have now obtained is the product of ab and cd.)
         print("You have scored {} percentage".format(perc))
         print("We know that you can score better."+ Fore.RED +"You should try again")
 
+def had():
+    print(Fore.RED + Back.BLACK + '''
+    Welcome to the Everyday Maths Module.
+    Here we will learn how some basic mathematical concepts can be used in our daily life.
+    We all make use of distances and heights in daily life.
+    For example: Measuring the height of our shadows, Measuring distances between 2 points and much more.
+    Its not practically possible to measure large distances. So, we make use of " Trigonometry " for such purposes. Also, trigonometry is majorly used in aviation. It helps in determining distances covered,heghts achieved by plane when it took off at a certain angle.
+    Trigonometric ratios are ratios of different sides of a right angled triangle. A right angled triangle has perpendicular(P),base(B) and hypotenuse(H).
+    Let us call the angle opposite perpendicular A. So,we call the ratio between
+     P/B as tanA
+     B/P as cotA
+     P/H as sinA
+     B/H as cosA These are some basic ratios that we use in solving height and distance measurement questions. We try to  analyse daily life situations and try to apply these concepts there.
+     ''' )
+    lhd = {"A street light pole stands between two parallel roads. The height of the pole is 10m. From the top of the tower, the angles of depression of the roads are 45° and 30°. Find the distance between the roads.":27.32,
+      "A tree of height 24 cm stands in my vicinity. On a stormy night, the tree broke and fell in such a way that the upper part remained attached to the stem, forming an angle of 30° with the ground. Find the height from where it broke.":8,
+       "The shadow formed by a man on a sunny day is 1/3 times the actual height. Find the sun's angle of elevation?":60,
+      "The actual height of a man is 6 feet but due to the position of Sun he casts a shadow of 4 feet. He is standing next to an electricity tower and notices that it casts a shadow of 36 feet. Find the height of the electricity tower.":54,
+        }
+    for i in range(4):
+        hd1 = list(lhd.keys())[i]
+        print(Fore.RED + Back.BLACK + "This is your question 👇", hd1, sep='\n')
+        print("Please enter answer without the units")
+        anshd = input("Enter the answer: ")
+        lmfao = anshd.replace(' ', '').lower()
+        try:
+            if float(lmfao) == float(list(lhd.values())[i]) :
+                print("You got the correct answer!")
+        except:
+            if lmfao.find('pi') != -1 or lmfao.find('Pi') != -1:
+                if lmfao.find('/') != -1 :
+                    jjj = float(lmfao[lmfao.find('/')+1:lmfao.find('/')+2])
+                    sos = 180/jjj
+                else:
+                    sosiph = float(lmfao.lower().replace('pi',''))
+                    sos = sosiph*180
+                if sos == float(list(lhd.values())[i]):
+                    print("You got the correct answer!")
+            elif lmfao == '':
+                print('You did not enter anything.')
+            else: print("Your answer is incorrect.", "Better luck next time.", sep='\n')
+        i+=1
+        if i == 4 : break
+        print()
+        time.sleep(1)
+
+
+
+
+def ci():
+    print('''
+    Let's learn about compound interest another mathematical concept used in our daily life.
+    When we deposit some money (P) for some time(t) at some rate of interest(R), provided that it is compounded at periodic intervals of time this ,means that after every interval the principal of the next interval is the amount(A) at the previous interval.Thus , it gets compounded after intervals.
+    Therefore, the formula for ''' )
+    listi = ["Mr. Narendra", "Reliance Industries", "Laksh"]
+    for i in range(4):
+        rnnr = random.randint(1,4)
+        if rnnr == 1:
+            n=1
+            nmx='yearly'
+            t = 3
+        if rnnr == 2:
+            n=2
+            nmx="halfyearly"
+            t = 2
+        if rnnr == 3:
+            n=4
+            nmx = "quarterly"
+            t = 1
+        lii = random.choice(listi)
+        r = random.randint(5,16)
+        p = random.choice(list(range(10000, 60000, 10000)))
+        a = lambda p,r,n,t : p*(1+r/n)**(n*t)
+        print("{} invests ₹{} for a period of {} years. Find the total amount if it is compounded {} at a rate of {}".format(lii,p,t,nmx,r))
+        time.sleep(1)
+        answerpls = float(input("Enter your answer : ₹ "))
+        if answerpls == round(float(a(p,r,n,t)),2):
+            print("Well Done!")
+            print("You got the correct answer.")
+        else: print("Uh-Oh, Incorrect answer."); print("The correct answer is {}".format(round(float(a(p,r,n,t))),2))
+        print()
+        time.sleep(1)
+
+
+
+
 def elev():
     print(Back.BLACK +'Do you know about various tricks which are given by Vedic Maths?')
     speak('Do you know about various tricks which are given by Vedic Maths?')
@@ -182,6 +280,89 @@ def elev():
         print(Fore.GREEN + "WOW !! Nice Score")
     else:
         print("You have scored {} percentage".format(perc1))
+        print("We know that you can score better."+ Fore.RED +"You should try again")
+
+
+def sqr5():
+    print(Back.BLACK +'Do you know about various tricks which are given by Vedic Maths?')
+    eng.say('Do you know about various tricks which are given by Vedic Maths?')
+    eng.runAndWait()
+    print(Fore.RED + Back.BLACK + """
+    We are going to learn about one of the basic rules of vedic maths.""" + Fore.BLUE + Back.BLACK + """
+    This involves easily finding squares of 2 digit numbers ending with digit 5 .
+    STEP-1
+    As we all know square of any number ending with 5 must have 25 as digits on it's tens  and ones places respectively.
+    STEP-2
+    Multiply the tens digit of the number with its successor and write down the number obtained in front of 25.
+    You got the square of the number.""" )
+    print(Fore.GREEN + """
+    Example -
+    Let the number be 65.
+    So, at tens and ones digit we put 25.
+    Next  we multiply 6 X (6+1)
+                      6 X 7= 42
+    So, square of 65 comes out to be 4225.""")
+
+    eng.say("We are going to learn about one of the basic rules of vedic maths.")
+    eng.runAndWait()
+    eng.say("This involves easily finding squares of 2 digit numbers ending with digit 5 .")
+    eng.say("STEP-1 As we all know square of any number ending with 5 must have 25 as digits on it's tens  and ones places respectively.")
+    eng.runAndWait()
+    eng.say("STEP-2 Multiply the tens digit of the number with its successor and write down the number obtained in front of 25.You got the square of the number.")
+    eng.runAndWait()
+    eng.say("Example")
+    eng.runAndWait()
+    eng.say("Let the number be 65.So, at tens and ones digit we put 25.")
+    eng.runAndWait()
+    eng.say("Next  we multiply 6 X (6+1) 6 X 7= 42")
+    eng.runAndWait()
+    eng.say("So, square of 65 comes out to be 4225.")
+    eng.runAndWait()
+    time.sleep(1)
+    print()
+    scr = 0
+    while True:
+        for i1 in range(4):
+            no1 = floor(randrange(15,96,10 ))
+            print( Style.DIM +'Find the square of',no1)
+            eng.say('Find the square of ')
+            eng.runAndWait()
+            eng.say(no1)
+            eng.runAndWait()
+            eng.say("Enter the answer . If you don't know just press enter")
+            eng.runAndWait()
+            right_answer = no1 **2
+            #t= Timer(60, time_up) #x is amount of allowed time in seconds then execute the provided function
+            #t.start() #start the timerx = np.linspace(-2,2,100)
+            ans = input('Enter the answer, if you dont know it just press enter: ')
+            if ans == str(right_answer):
+                #t.cancel()
+                scr += 1
+                print( Fore.GREEN +'Well Done! Your answer is correct')
+                eng.say('Well Done! Your answer is correct')
+                eng.runAndWait()
+            elif ans == "":
+                #t.cancel()
+                print(Back.BLACK + "The correct answer is {}".format(right_answer))
+                eng.say("The correct answer is {}".format(right_answer))
+                eng.runAndWait()
+            elif ans != str(right_answer):
+                #t.cancel()
+                print(Back.BLACK + 'Sorry, incorrect answer')
+                eng.say('Sorry, incorrect answer')
+                eng.runAndWait()
+                print(Back.BLACK + 'The correct answer is {}'.format(no1**2))
+                eng.say('The correct answer is {}'.format(no1 **2))
+                eng.runAndWait()
+            print()
+        break
+    print("You got {} questions right out of 4".format(scr))
+    perc = ((int(scr)/4)*100)
+    if perc >= 75:
+        print("Which means you scored" + Fore.CYAN + " {} %".format(perc))
+        print(Fore.GREEN + "WOW !! Nice Score")
+    else:
+        print("You have scored {} percentage".format(perc))
         print("We know that you can score better."+ Fore.RED +"You should try again")
 
 # def linear():
@@ -397,7 +578,10 @@ def mod():
     print()
     while True:
         print(Fore.YELLOW + 'Choose one of the following options.')
-        print(Fore.RED + '1 --> Linear Equations; 2 --> Coordinate Geometry (section formula); 3 --> Visualise Equations; 4 --> Go Back')
+        print(Fore.RED + '''1 --> Linear Equations
+         2 --> Coordinate Geometry (section formula)
+         3 --> Visualise Equations
+         4 --> Go Back''')
         c1 = int(input())
         if c1 == 1: into()  #; linear()
         if c1 == 2: cg()
@@ -431,9 +615,17 @@ def calculus():
             speak("Find the derivative of f(x) =" ,expression)
             
             print( Fore.CYAN + "Choose the correct option. If you don't know just press enter")
+
+            print(Back.BLACK +'1 -->', op1)
+            print(Back.BLACK +'2 -->', op2)
+            print(Back.BLACK +'3 -->', op3)
+            speak("Choose the correct option. If you don't know just press enter")
+            
+
             print(Back.BLACK +'1 -->', op1, '; 2 -->', op2, '; 3 -->', op3)
             speak("Choose the correct option. If you don't know just press enter")
             
+
             it = input()
             if it == "1":
                 annn = op1
@@ -528,11 +720,28 @@ def adv():
     print('While answering the question enter the closest integer value')
     while True:
         print(Back.BLACK + 'Choose one of the following options')
-        print( Fore.RED + '1 --> Calculus;  2 --> Quadratic Equations; 3 --> Go Back')  # 2 --> Quadratic Equations;
+        print( Fore.RED + '''1 --> Calculus
+          2 --> Quadratic Equations
+          3 --> Go Back''')  # 2 --> Quadratic Equations;
         c2 = int(input())
         if c2 == 1: calculus()
         if c2 == 2: quad()
         elif c2 == 3: break
+
+
+def evd():
+    print('There will be a total of 4 questions')
+    while True :
+        print(Back.BLACK + 'Choose one of the following options')
+        print("""1 --> Heights and Distances
+            2 --> Compound Interest
+            3 --> Go Back""")
+        cwfl = int(input())
+        if cwfl == 1: had()
+        if cwfl == 2: ci()
+        if cwfl == 3: break
+
+
 
 
 
@@ -555,7 +764,6 @@ def into():
         if intro_ques1 == "no":
             print( Back.BLACK + """
             In simple terms variables is something whose value can change(or vary).
-
             Let me explain you this in simpler terms for example Ram has 5 apples. Now if he will never eat those apples the quantity of those apples will never change
             Those apples are 5 and will remain 5 untill someone eats them. So here we have a constant 5 But now Shyam comes
             and he says that he has "some" apples now how can we define that "some" we don't have any definate to put in the place
@@ -580,7 +788,7 @@ def into():
    
             ln_examples = cv2.imread('Types-of-linear-equation.png',1)
             not_ln_examples = cv2.imread('not-linear-equations.png',1)
-          
+
             cv2.imshow("Types-of-linear-equation",ln_examples)
             k = cv2.waitKey(33)
             print("These are the examples of types of linear equation. The window will automatically after 6 seconds ")
@@ -595,7 +803,7 @@ def into():
             speak("They are not linear equation. The window will close automatically after 6 seconds")
             time.sleep(6)
             cv2.destroyWindow("Not linear equations")
-    
+
 
 
 # examples to be added using image or anything
@@ -670,7 +878,7 @@ def visualise_eqn2():
     k = cv2.waitKey(33)
     time.sleep(6)
     cv2.destroyWindow("GRAPH.jpeg")
-    
+
     # eng.say("Do you want to plot a of your own equation:")
     # eng.runAndWait()
     # user_input()
@@ -732,22 +940,18 @@ def time_up():
 def welcome():
     print(Fore.CYAN+Back.BLACK+
 """
-
 ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
 ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
 ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗
 ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝
 ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
  ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
-
-
 """
 )
 
 def game_over():
     print(Fore.CYAN + Back.BLACK +
 """
-
    ▄██████▄     ▄████████   ▄▄▄▄███▄▄▄▄      ▄████████       ▄██████▄   ▄█    █▄     ▄████████    ▄████████
   ███    ███   ███    ███ ▄██▀▀▀███▀▀▀██▄   ███    ███      ███    ███ ███    ███   ███    ███   ███    ███
   ███    █▀    ███    ███ ███   ███   ███   ███    █▀       ███    ███ ███    ███   ███    █▀    ███    ███
@@ -757,7 +961,6 @@ def game_over():
   ███    ███   ███    ███ ███   ███   ███   ███    ███      ███    ███ ███    ███   ███    ███   ███    ███
   ████████▀    ███    █▀   ▀█   ███   █▀    ██████████       ▀██████▀   ▀██████▀    ██████████   ███    ███
                                                                                                  ███    ███
-
 """
 )
 
@@ -767,7 +970,11 @@ def game_over():
 def main():
     while True:
         print(Fore.YELLOW + "Choose one of the following options.")
-        print(Fore.RED + '1 --> Basic Level; 2 --> Moderate Level; 3 --> Advance Level; 4 --> End Game')
+        print(Fore.RED + '''1 --> Basic Level (VEDIC MATHS)
+        2 --> Moderate Level(6TH -8TH STANDARD)
+        3 --> Advance Level(9TH TO 12TH STANDARD)
+        4 --> Everyday Mathematics
+        5 --> End Game''')
         c = int(input())
         if c == 1:
             basic()
@@ -776,6 +983,8 @@ def main():
         if c == 3:
             adv()
         if c == 4 : # scr+scr1+scr2+scr3+scr4+scr5 is not working so removed
+            evd()
+        if c == 5
             print( Fore.RED +  'You have successfully exited the game.')
             speak("exit")
             break
