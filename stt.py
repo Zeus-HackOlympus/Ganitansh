@@ -20,13 +20,12 @@ suppress()
 mic = sr.Microphone()
 display()
 
+
 with mic as source: 
     r.adjust_for_ambient_noise(source)
     audio = r.listen(source)
     try:
         x = r.recognize_google(audio)
-    except UnknownValueError:
+        print(x)
+    except :
         pass
-
-
-print(x)

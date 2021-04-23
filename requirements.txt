@@ -39,3 +39,4 @@ wcwidth==0.2.5
 opencv-python
 pyaudio
 speechrecognition
+PyInputPlus==0.2.12

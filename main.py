@@ -10,53 +10,80 @@ import numpy as np
 from sympy import *
 from IPython.display import display, Math, Latex
 from threading import Timer
-from colorama import Fore, Back, Style, init
+from colorama import * 
 import cv2
-
+import pyinputplus as pyip
 #def story():
 
+class emoji:
+    point_right = '\U0001F449' 	
+    correct = '\u2705'
+    wrong = '\u274C'
+    frowning = "☹️  "
 
+class color:
+    # Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
+    BOLD = '\033[1m'
+    END = '\033[0m'
+    Theory = Fore.MAGENTA + Back.BLACK
+    Theory2 = Fore.CYAN
+    Ques = Fore.YELLOW + "Q. " + Fore.RED + BOLD + Back.BLACK
+    Ans = Fore.WHITE
+    Imp = Fore.YELLOW + BOLD  + Back.BLACK
+    Menu = Fore.GREEN+ Back.BLACK
 
+    
 def speak(text):
     eng.say(text)
-    eng.runandwait()
+    eng.runAndWait()
+
+# add this in main.py
 
 
+def basic_menu():
+     print(color.Menu + """
+1 {0} Double Digit Multiplication
+2 {0} Multiplication of a two-digit number by 11
+3 {0} Finding square of double digit numbers ending with 5
+4 {0} Go Back
+""".format(emoji.point_right))
+        
+def basic_menu2():
+            print(color.Menu + """
+1 {0} Double Digit Multiplication; 
+2 {0} Multiplication of a two-digit number by 11... ; 
+3 {0} Go Back""".format(emoji.point_right))
+ 
 
 def basic():
-    print(Back.BLACK + Fore.RED + 'This will include questions that are to be solved using Vedic Maths in a given time limit')
-    print(Fore.RED+Back.BLACK+'These will help you develop your speed of calculation')
+    print(color.Imp+ 'This will include questions that are to be solved using Vedic Maths in a given time limit')
+    print(color.Imp+'These will help you develop your speed of calculation')
     speak('This will include questions that are to be solved using Vedic Maths in a given time limit and they will help you develop your speed of calculation')
-    print(Fore.BLUE + Back.BLACK+'You will have 60 seconds to attempt each question')
+    print(color.Imp +'You will have ' + Fore.MAGENTA + ' 60 seconds to attempt each question')
     speak('You will have 60 seconds to attempt each question')
-    while True:
-        time.sleep(1)
-        print(Fore.GREEN + Back.BLACK + """1 --> Double Digit Multiplication
-         2 --> Multiplication of a two-digit number by 11
-         3--> Finding square of double digit numbers ending with 5
-         4 --> Go Back""")
+    while True: 
+        basic_menu()
         speak('Type one of the following options. 1 Double Digit Multiplication; 2 Multiplication by number of the form 11; 3 Go Back')
-        
-        print(Fore.GREEN + Back.BLACK + "1 --> Double Digit Multiplication; 2 --> Multiplication of a two-digit number by 11... ; 3 --> Go Back")
+        basic_menu2()
         speak('Type one of the following options. 1 Double Digit Multiplication; 2 Multiplication by number of the form 11; 3 Go Back')
-        print( Fore.GREEN + Back.BLACK +"Choose one of the following options.")
-        choice = int(input())
+        print( color.Imp +"Choose one of the following options.")
+        choice = pyip.inputInt("\n")
         if choice== 1: dd()
         if choice== 2: elev()
-        if choice==3: sqr5()
+        if choice== 3: sqr5()
         if choice== 4: break
 
 def dd():
-    print(Back.BLACK +'Do you know about various tricks which are given by Vedic Maths?')
+    print(color.Theory +'Do you know about various tricks which are given by Vedic Maths?')
     speak('Do you know about various tricks which are given by Vedic Maths?')
-    print(Fore.RED + Back.BLACK + """
-We are going to learn about one of the basic rules of vedic maths.""" + Fore.BLUE + Back.BLACK + """
+    print(color.Theory + """
+We are going to learn about one of the basic rules of vedic maths.""" + color.Theory + """
 This involves multiplication of two digit numbers.
 Say you have any two digit numbers : ab and cd, where a is in tenth place of number "ab" and b is in ones place, similarly for "cd".
 So the trick is to take the ones digit of both numbers and multiply it (i.e. b x d) and write the ones digit of their product as the ones digit of a new number.
 And carry forward the tens place digit.
 """ )
-    print(Fore.GREEN + """
+    print(color.Theory + """
 Now take the product of "a" and "d" and add it to the product of "b" and "c" (i.e. a x d + b x c).
 Now you need to add the tens place digit of the number obtained on multiplying "b" and "d".
 now take the ones place digit of the number obtained and put it in the tens place of the number and carry forward the tens place digit.
@@ -83,7 +110,7 @@ The number that you have now obtained is the product of ab and cd.)
         for i1 in range(4):
             no1 = floor(random.uniform(10, 99))
             no2 = floor(random.uniform(10, 99))
-            print( Style.DIM +'Find the product when',no1,'is multiplied by',no2)
+            print( 'Find the product when',no1,'is multiplied by',no2)
             speak('Find the product on multiplication of: ')
             speak(no1)
             speak('and')
@@ -93,36 +120,36 @@ The number that you have now obtained is the product of ab and cd.)
             right_answer = no1 * no2
             #t= Timer(60, time_up) #x is amount of allowed time in seconds then execute the provided function
             #t.start() #start the timerx = np.linspace(-2,2,100)
-            ans = input('Enter the answer, if you dont know it just press enter: ')
+            ans = pyip.inputStr('Enter the answer, if you dont know it just press enter: ',blank=True)
             if ans == str(right_answer):
                 #t.cancel()
                 scr += 1
-                print( Fore.GREEN +'Well Done! Your answer is correct')
+                print( color.Ans + 'Well Done! Your answer is correct {}'.format(emoji.correct)  )
                 speak('Well Done! Your answer is correct')
                 
             elif ans == "":
                 #t.cancel()
-                print(Back.BLACK + "The correct answer is {}".format(right_answer))
+                print(color.Ans + "The correct answer is {}".format(right_answer))
                 speak("The correct answer is {}".format(right_answer))
             elif ans != str(right_answer):
                 #t.cancel()
-                print(Back.BLACK + 'Sorry, incorrect answer')
-                speak('Sorry, incorrect answer')
-                print(Back.BLACK + 'The correct answer is {}'.format(no1 * no2))
+                print(color.Wrong + 'Oops {}, incorrect answer {}'.format(emoji.Frowning,emoji.Wrong))
+                speak('Oops, incorrect answer')
+                print(color.Ans + 'The correct answer is {}'.format(no1 * no2))
                 speak('The correct answer is {}'.format(no1 * no2))
-            print()
+            print("\n")
         break
     print("You got {} questions right out of 4".format(scr))
     perc = ((int(scr)/4)*100)
     if perc >= 75:
         print("Which means you scored" + Fore.CYAN + " {} %".format(perc))
-        print(Fore.GREEN + "WOW !! Nice Score")
+        print(Fore.GREEN + "WOW !! Nice Score {}".format(emoji.Thumbsup))
     else:
         print("You have scored {} percentage".format(perc))
         print("We know that you can score better."+ Fore.RED +"You should try again")
 
 def had():
-    print(Fore.RED + Back.BLACK + '''
+    print(color.Theory + '''
     Welcome to the Everyday Maths Module.
     Here we will learn how some basic mathematical concepts can be used in our daily life.
     We all make use of distances and heights in daily life.
@@ -142,13 +169,13 @@ def had():
         }
     for i in range(4):
         hd1 = list(lhd.keys())[i]
-        print(Fore.RED + Back.BLACK + "This is your question 👇", hd1, sep='\n')
-        print("Please enter answer without the units")
-        anshd = input("Enter the answer: ")
+        print(Fore.RED + Back.BLACK + "This is your question 👇\n",hd1)
+        print(color.Imp + "Please enter answer without the units")
+        anshd = pyip.inputStr("Enter the answer: ",blank=True)
         lmfao = anshd.replace(' ', '').lower()
         try:
             if float(lmfao) == float(list(lhd.values())[i]) :
-                print("You got the correct answer!")
+                print( color.Ans+ "You got the correct answer! {}".format(emoji.Correct))
         except:
             if lmfao.find('pi') != -1 or lmfao.find('Pi') != -1:
                 if lmfao.find('/') != -1 :
@@ -158,20 +185,19 @@ def had():
                     sosiph = float(lmfao.lower().replace('pi',''))
                     sos = sosiph*180
                 if sos == float(list(lhd.values())[i]):
-                    print("You got the correct answer!")
+                    print( color.Ans + "You got the correct answer! {}".format(emoji.correct))
             elif lmfao == '':
                 print('You did not enter anything.')
             else: print("Your answer is incorrect.", "Better luck next time.", sep='\n')
         i+=1
         if i == 4 : break
-        print()
+        print("\n")
         time.sleep(1)
 
 
 
-
 def ci():
-    print('''
+    print(color.Theory + '''
     Let's learn about compound interest another mathematical concept used in our daily life.
     When we deposit some money (P) for some time(t) at some rate of interest(R), provided that it is compounded at periodic intervals of time this ,means that after every interval the principal of the next interval is the amount(A) at the previous interval.Thus , it gets compounded after intervals.
     Therefore, the formula for ''' )
@@ -196,7 +222,7 @@ def ci():
         a = lambda p,r,n,t : p*(1+r/n)**(n*t)
         print("{} invests ₹{} for a period of {} years. Find the total amount if it is compounded {} at a rate of {}".format(lii,p,t,nmx,r))
         time.sleep(1)
-        answerpls = float(input("Enter your answer : ₹ "))
+        answerpls = pyip.inputStr("Enter your answer : ₹ ")
         if answerpls == round(float(a(p,r,n,t)),2):
             print("Well Done!")
             print("You got the correct answer.")
@@ -208,9 +234,9 @@ def ci():
 
 
 def elev():
-    print(Back.BLACK +'Do you know about various tricks which are given by Vedic Maths?')
+    print(color.Imp +'Do you know about various tricks which are given by Vedic Maths?')
     speak('Do you know about various tricks which are given by Vedic Maths?')
-    print( Fore.RED + Back.BLACK +"""
+    print( color.Theory +"""
     We will learn about the a trick to ease our calculations when we multiply any 2-digit number by 11.
     When we multiply a 2-digit number for example-43 by 11,using the trick the answer comes out to be 473.
     Let us see how,
@@ -234,90 +260,79 @@ def elev():
     and tens digit(1) will be added to the hundreds digit of the answer(6+1)37.''')
     time.sleep(4)
     speak('Let\'s Practice')
-    print( Fore.GREEN +"Let's Practice")
+    print( color.Imp +"Let's Practice")
     time.sleep(2)
     scr1 = 0
     while True:
         for ii in range(4):
             no3 = floor(random.uniform(11, 100))
-            lol = int(input('Enter how many digits of 1 you want in the multiplier: '))
+            lol = pyip.inputInt('Enter how many digits of 1 you want in the multiplier: ')
             r = '1'*lol
-            print( Back.BLACK + Fore.MAGENTA +  'Find the product when', no3,'is multiplied by', int(r))
-            speak('Find the product when')
-            speak(no3)
-            speak('is multiplied by', int(r))
-            speak('Enter the answer. If you dont know just press enter: ')
-            ans = input("Enter the answer. If you dont know just press enter:")
+            print( color.Ques +  'Find the product when', no3,'is multiplied by', int(r))
+            speak("Find the product when {} is multiplied by {}. Enter the answer.".format(no3,int(r),) + color.Imp +  "If you dont know just press enter")
+            ans = pyip.inputStr("Enter the answer. If you dont know just press enter:",blank=True)
             # t = Timer(60, time_up) # x is amount of allowed time in seconds then execute the provided function
             # t.start() #start the timer
             rgtans = no3 * int(r)
             if ans == str(rgtans):
                 # t.cancel()
                 scr1 += 1
-                print( Back.BLACK + 'Well Done! Your answer is correct')
+                print( Back.BLACK + 'Well Done! Your answer is correct{}'.format(emoji.Correct))
                 speak('Well Done! Your answer is correct')
             elif ans == "":
-                print( Back.BLACK + "The correct answer is {}".format(rgtans))
+                print( color.Ans + "The correct answer is {}".format(rgtans))
                 speak("The correct answer is {}".format(rgtans))
                 
             elif ans != str(rgtans) :
                 # t.cancel()
-                print( Fore.RED +'Your answer is incorrect')
+                print( Fore.RED +'{} Your answer is incorrect {} '.format(emoji.Frowning,emoji.Wrong))
                 speak('Your answer is incorrect')
-                print( Fore.GREEN + 'The correct answer is', rgtans)
+                print( Fore.GREEN + 'The correct answer is {} '.format(rgtans))
                 speak('The correct answer is')
                 speak(rgtans)
 
 
 
-            print()
+            print("\n")
 
         break
     print("You got {} questions right out of 4".format(scr1))
     perc1 = ((int(scr1)/4)*100)
     if perc1 >= 75:
-        print("Which means you scored" + Fore.CYAN + " {} %".format(perc1))
-        print(Fore.GREEN + "WOW !! Nice Score")
+        print(color.Imp + "Which means you scored" + Fore.CYAN + " {} %".format(perc1))
+        print(Fore.GREEN + "WOW !! Nice Score ")
     else:
         print("You have scored {} percentage".format(perc1))
         print("We know that you can score better."+ Fore.RED +"You should try again")
 
 
 def sqr5():
-    print(Back.BLACK +'Do you know about various tricks which are given by Vedic Maths?')
-    eng.say('Do you know about various tricks which are given by Vedic Maths?')
-    eng.runAndWait()
-    print(Fore.RED + Back.BLACK + """
-    We are going to learn about one of the basic rules of vedic maths.""" + Fore.BLUE + Back.BLACK + """
-    This involves easily finding squares of 2 digit numbers ending with digit 5 .
+    print(color.Imp +'Do you know about various tricks which are given by Vedic Maths?')
+    speak('Do you know about various tricks which are given by Vedic Maths?')
+    
+    print(color.Theory + """
+    We are going to learn about one of the basic rules of vedic maths.
+    This involves easily finding squares of 2 digit numbers ending with digit 5 .""" + Fore.MAGENTA +"""
     STEP-1
+    """+"""
     As we all know square of any number ending with 5 must have 25 as digits on it's tens  and ones places respectively.
+    """ + Fore.MAGENTA + """  
     STEP-2
+    """ + 
+    color.Theory + 
+    """
     Multiply the tens digit of the number with its successor and write down the number obtained in front of 25.
     You got the square of the number.""" )
-    print(Fore.GREEN + """
+    print(color.Theory + """
     Example -
     Let the number be 65.
     So, at tens and ones digit we put 25.
-    Next  we multiply 6 X (6+1)
-                      6 X 7= 42
+    Next  we multiply """ + Fore.White + """
+                      6 X (6+1)
+                      6 X 7= 42 """ + color.Theory + """
     So, square of 65 comes out to be 4225.""")
 
-    eng.say("We are going to learn about one of the basic rules of vedic maths.")
-    eng.runAndWait()
-    eng.say("This involves easily finding squares of 2 digit numbers ending with digit 5 .")
-    eng.say("STEP-1 As we all know square of any number ending with 5 must have 25 as digits on it's tens  and ones places respectively.")
-    eng.runAndWait()
-    eng.say("STEP-2 Multiply the tens digit of the number with its successor and write down the number obtained in front of 25.You got the square of the number.")
-    eng.runAndWait()
-    eng.say("Example")
-    eng.runAndWait()
-    eng.say("Let the number be 65.So, at tens and ones digit we put 25.")
-    eng.runAndWait()
-    eng.say("Next  we multiply 6 X (6+1) 6 X 7= 42")
-    eng.runAndWait()
-    eng.say("So, square of 65 comes out to be 4225.")
-    eng.runAndWait()
+    speak("""We are going to learn about one of the basic rules of vedic maths.This involves easily finding squares of 2 digit numbers ending with digit 5 .STEP-1 As we all know square of any number ending with 5 must have 25 as digits on it's tens  and ones places respectively.STEP-2 Multiply the tens digit of the number with its successor and write down the number obtained in front of 25.You got the square of the number.Example Let the number be 65.So, at tens and ones digit we put 25. Next  we multiply 6 with 7 that is 42. So, square of 65 comes out to be 4225.""")
     time.sleep(1)
     print()
     scr = 0
@@ -325,188 +340,140 @@ def sqr5():
         for i1 in range(4):
             no1 = floor(randrange(15,96,10 ))
             print( Style.DIM +'Find the square of',no1)
-            eng.say('Find the square of ')
-            eng.runAndWait()
-            eng.say(no1)
-            eng.runAndWait()
-            eng.say("Enter the answer . If you don't know just press enter")
-            eng.runAndWait()
-            right_answer = no1 **2
+            speak("Find the square of {} Enter the answer. If you don't know just press enter".formt(no1))
+            right_answer = no1 ** 2
             #t= Timer(60, time_up) #x is amount of allowed time in seconds then execute the provided function
             #t.start() #start the timerx = np.linspace(-2,2,100)
-            ans = input('Enter the answer, if you dont know it just press enter: ')
+            ans = pyip.inputStr('Enter the answer, if you dont know it just press enter: ')
             if ans == str(right_answer):
                 #t.cancel()
                 scr += 1
-                print( Fore.GREEN +'Well Done! Your answer is correct')
-                eng.say('Well Done! Your answer is correct')
-                eng.runAndWait()
+                print( color.Ans + 'Well Done! Your answer is correct {}'.format(emoji.Correct))
+                speak('Well Done! Your answer is correct')
             elif ans == "":
                 #t.cancel()
-                print(Back.BLACK + "The correct answer is {}".format(right_answer))
-                eng.say("The correct answer is {}".format(right_answer))
-                eng.runAndWait()
+                print(color.Ans + "The correct answer is {}".format(right_answer))
+                speak("The correct answer is {}".format(right_answer))
             elif ans != str(right_answer):
                 #t.cancel()
-                print(Back.BLACK + 'Sorry, incorrect answer')
-                eng.say('Sorry, incorrect answer')
-                eng.runAndWait()
+                print(Fore.MAGENTA + 'Oops {}, incorrect answer {}'.format(emoji.Frowning,emoji.Wrong))
+                speak('Sorry, incorrect answer')
                 print(Back.BLACK + 'The correct answer is {}'.format(no1**2))
-                eng.say('The correct answer is {}'.format(no1 **2))
-                eng.runAndWait()
+                speak('The correct answer is {}'.format(no1 **2))
             print()
         break
     print("You got {} questions right out of 4".format(scr))
     perc = ((int(scr)/4)*100)
     if perc >= 75:
-        print("Which means you scored" + Fore.CYAN + " {} %".format(perc))
+        print(color.Imp  + "Which means you scored" + Fore.CYAN + " {} %".format(perc))
         print(Fore.GREEN + "WOW !! Nice Score")
     else:
-        print("You have scored {} percentage".format(perc))
+        print("You have scored " + color.Imp + str(perc) + Fore.WHITE + " percentage")
         print("We know that you can score better."+ Fore.RED +"You should try again")
 
-# def linear():
-#     print(Fore.RED + 'These questions will test your basic knowledge of Linear Equations')
-#     print(Fore.RED + 'A linear equation of the form ax + by + c will be given')
-#     eng.say('These questions will test your basic knowledge of Linear Equations. A linear equation of the form ax + by + c will be given')
-#     eng.runAndWait()
-#     print(Style.DIM + 'You have to find the value of x only')
-#     eng.say('You have to find the value of x only')
-#     eng.runAndWait()
-#     time.sleep(2)
-#     scr2 = 0
-#     while True:
-#         for i in range(4):
-#             num1 = floor(random.uniform(-10, 10))
-#             num2 = floor(random.uniform(-10, 10))
-#             con = floor(random.uniform(-10, 10))
-#             var = floor(random.uniform(-10, 10))
-#             sym.init_printing()
-#             x,y = sym.symbols('x,y')
-#             a = sym.Eq(num1*x + num2*y + con,0)
-#             b = sym.Eq((num1+var)*x + num2*var*y + (con/var),0)
-#             d = {}
-#             d = sym.solve([a,b],(x,y))
-#             print( Style.DIM + 'equation 1 is', num1,x, '+', num2,y, '+', con, '=', '0')
-#             eng.say('equation 1 is')
-#             eng.runAndWait()
-#             eng.say(num1)
-#             eng.runAndWait()
-#             eng.say('x plus')
-#             eng.runAndWait()
-#             eng.say(num2)
-#             eng.runAndWait()
-#             eng.say('y plus')
-#             eng.runAndWait()
-#             eng.say(con)
-#             eng.runAndWait()
-#             eng.say('equal to zero')
-#             eng.runAndWait()
-#             print( Back.BLACK + 'equation 2 is', (num1+var),x, '+', (num2*var)+y, '+', con/var, '=', '0')
-#             print( Fore.CYAN + 'Enter the value of x')
-#             #display(Math(r'nudef cg():
-#     print( Back.BLACK + 'These questions will test your basic knowledge of Coordinate Geometry more specifically the section formula')
-#     print( Back.BLACK + 'The coordinates of the two end points and the ratio with which the line is internally divided will be given')
-#     print( Back.BLACK + 'You have to find the coordinates of the point which divides the line internally in the given ratio')
-#     scr3 = 0
-#     while True:
-#         for i2 in range(4):
-#             x1 = floor(random.uniform(-10, 10))
-#             x2 = floor(random.uniform(-10, 10))
-#             y1 = floor(random.uniform(-10, 10))
-#             y2 = floor(random.uniform(-10, 10))
-#             m = floor(random.uniform(-10, 10))
-#             n = floor(random.uniform(-10, 10))
-#             lmb = lambda x1,x2,m,n : (x1*n + x2*m)/m+n
-#             lmb1 = lambda y1,y2,m,n : (y1*n + y2*m)/m+n
-#             print(Fore.CYAN + 'coordinates of point1 are', '(',x1,',',y1,')')
-#             print( Fore.CYAN + 'coordinates of point2 are', '(',x2,',',y2,')')
-#             print( Back.BLACK +'The line is internally divided in a ratio of m:n where m = {} and n = {}'.format(m,n))
-#             x3 = int(input('Enter the x coordinate of point '))
-#             y3 = int(input('Enter the y coordinate of point '))
-#             kaw = floor(lmb(x1,x2,m,n))
-#             koo = floor(lmb1(y1,y2,m,n))
-#             t= Timer(120, time_up) #x is amount of allowed time in seconds then execute the provided function
-#             t.start() #start the timer
-#             if x3 == kaw and y3 == koo:
-#                 t.cancel()
-#                 scr3 += 1
-#                 print( Fore.GREEN + 'Good Job! Your answer is correct')
-#                 eng.say('Good Job! Your answer is correct')
-#                 eng.runAndWait()
-#             else :
-#                 t.cancel()
-#                 print( Style.DIM + 'Your answer is incorrect')
-#                 eng.say('Your answer is incorrect')
-#                 eng.runAndWait()
-#                 print( Fore.YELLOW + 'The correct answer is, x coordinate = {} and y coordinate = {}'.format(kaw, koo))
-#                 eng.say('The correct answer is, x coordinate = {} and y coordinate = {}'.format(kaw, koo))
-#                 eng.runAndWait()
-#             print()
-#             time.sleep(5)
-#         break
-#     print('You got {} questions right out of 4'.format(scr3))
-#     perc3 = int((scr3)/4)*100
-#     if perc3 >= 75:
-#         print("Which means you scored" + Fore.CYAN + {} + "percentage".format(perc3))
-#         print(Fore.GREEN + "WOW !! Nice Score")
-#     else:
-#         print("You have scored {} percentage".format(perc3))
-#         print("We know that you can score better."+ Fore.RED +"You should try again")
-# m1 x + num2 y + con = 0'))
+def linear():
+    print(color.Theory + 'These questions will test your basic knowledge of Linear Equations')
+    print(color.Theory + 'A linear equation of the form ax + by + c will be given')
+    speak('These questions will test your basic knowledge of Linear Equations. A linear equation of the form ax + by + c will be given')
+    print(color.Theory + 'You have to find the value of x only')
+    speak('You have to find the value of x only')
+    time.sleep(2)
+    scr2 = 0
+    while True:
+        for i in range(4):
+            num1 = floor(random.uniform(-10, 10))
+            num2 = floor(random.uniform(-10, 10))
+            con = floor(random.uniform(-10, 10))
+            var = floor(random.uniform(-10, 10))
+            sym.init_printing()
+            x,y = sym.symbols('x,y')
+            a = sym.Eq(num1*x + num2*y + con,0)
+            b = sym.Eq((num1+var)*x + num2*var*y + (con/var),0)
+            d = {}
+            d = sym.solve([a,b],(x,y))
+            print( Fore.CYAN + 'equation 1 is', num1,x, '+', num2,y, '+', con, '=', '0')
+            speak("Equation 1 is {} x plus {} y plus {} equal to zero".format(num1,num2,con)) 
+            print( Fore.CYAN  + 'equation 2 is', (num1+var),x, '+', (num2*var)+y, '+', con/var, '=', '0')
+            print( 'Enter the value of x')
+            #display(Math(r'nudef cg():
+    print( color.Theory + 'These questions will test your basic knowledge of Coordinate Geometry more specifically the section formula')
+    print( color.Theory + 'The coordinates of the two end points and the ratio with which the line is internally divided will be given')
+    print( color.Theory + 'You have to find the coordinates of the point which divides the line internally in the given ratio')
+    scr3 = 0
+    while True:
+        for i2 in range(4):
+            x1 = floor(random.uniform(-10, 10))
+            x2 = floor(random.uniform(-10, 10))
+            y1 = floor(random.uniform(-10, 10))
+            y2 = floor(random.uniform(-10, 10))
+            m = floor(random.uniform(-10, 10))
+            n = floor(random.uniform(-10, 10))
+            lmb = lambda x1,x2,m,n : (x1*n + x2*m)/m+n
+            lmb1 = lambda y1,y2,m,n : (y1*n + y2*m)/m+n
+            print( Fore.CYAN + 'coordinates of point1 are', '(',x1,',',y1,')')
+            print( Fore.CYAN + 'coordinates of point2 are', '(',x2,',',y2,')')
+            print( Fore.CYAN +'The line is internally divided in a ratio of m:n where m = {} and n = {}'.format(m,n))
+            x3 = pyip.inputInt('Enter the x coordinate of point ')
+            y3 = pyip.inputInt('Enter the y coordinate of point ')
+            kaw = floor(lmb(x1,x2,m,n))
+            koo = floor(lmb1(y1,y2,m,n))
+            t= Timer(120, time_up) #x is amount of allowed time in seconds then execute the provided function
+            t.start() #start the timer
+            if x3 == kaw and y3 == koo:
+                t.cancel()
+                scr3 += 1
+                print( Fore.GREEN + 'Good Job! Your answer is correct')
+                speak('Good Job! Your answer is correct')
+                
+            else :
+                t.cancel()
+                print( Style.DIM + 'Your answer is incorrect')
+                speak('Your answer is incorrect')
+                print( Fore.YELLOW + 'The correct answer is, x coordinate = {} and y coordinate = {}'.format(kaw, koo))
+                speak('The correct answer is, x coordinate = {} and y coordinate = {}'.format(kaw, koo))
+            print()
+            time.sleep(5)
+        break
+    print('You got {} questions right out of 4'.format(scr3))
+    perc3 = int((scr3)/4)*100
+    if perc3 >= 75:
+        print("Which means you scored" + Fore.CYAN + {} + "percentage".format(perc3))
+        print(Fore.GREEN + "WOW !! Nice Score")
+    else:
+        print("You have scored {} percentage".format(perc3))
+        print("We know that you can score better."+ Fore.RED +"You should try again")
+#m1 x + num2 y + con = 0'))
 
-#     #        num1,x, '+', num2,y, '+', con, '=', '0')
-#             eng.say('equation 2 is')
-#             eng.runAndWait()
-#             eng.say(num1+var)
-#             eng.runAndWait()
-#             eng.say('x plus')
-#             eng.runAndWait()
-#             eng.say(num2*var)
-#             eng.runAndWait()
-#             eng.say('y plus')
-#             eng.runAndWait()
-#             eng.say(con/var)
-#             eng.runAndWait()
-#             eng.say('equal to zero')
-#             eng.runAndWait()
-#             eng.say("Enter the value of x. If you don't know the answer press space")
-#             eng.runAndWait()
-#             inp = int(input())
-#             k = floor(d[x])
-#             #t= Timer(120, time_up) #x is amount of allowed time in seconds then execute the provided function
-#             #t.start() #start the timer
-#             if inp == k:
-#                 #t.cancel()
-#                 scr2 += 1
-#                 eng.say('Enter the value of x and wait for 2 minutes')
-#                 eng.runAndWait()
-#                 print( Fore.GREEN +'Good Job! Your answer is correct')
-#             elif inp == "":
-#                 print(Fore.MAGENTA+"The correct answer is {}".format(k))
-#                 eng.say("The correct answer is {}".format(k))
-#                 eng.runAndWait()
-#             else :
-#                 #t.cancel()
-#                 print( Fore.RED + 'Your answer is incorrect')
-#                 eng.say('Your answer is incorrect')
-#                 eng.runAndWait()
-#                 print( Back.BLACK + 'The correct answer is', k)
-#                 eng.say('The correct answer is' + str(floor(d[x])))
-#                 eng.runAndWait()
-#                 eng.say(floor(d[x]))
-#                 eng.runAndWait()
-#             print()
-#             time.sleep(2)
-#         break
-#     print('You got {} questions right out of 4'.format(scr2))
-#     perc2 = int((scr2)/4)*100
-#     if perc2 >= 75:
-#         print("Which means you scored" + Fore.CYAN + {} + "percentage".format(perc2))
-#         print(Fore.GREEN + "WOW !! Nice Score")
-#     else:
-#         print("You have scored {} percentage".format(perc2))
-#         print("We know that you can score better."+ Fore.RED +"You should try again")
+#           num1,x, '+', num2,y, '+', con, '=', '0')
+        speak("equation 2 is {} x plus {} {} y plus {} equal to zero".format(num1+var,num2*var,con/var))
+        inp = pyip.inputInt("\n")
+        k = floor(d[x])
+        #t= Timer(120, time_up) #x is amount of allowed time in seconds then execute the provided function
+        #t.start() #start the timer
+        if inp == k:
+            #t.cancel()
+            scr2 += 1
+            speak('Enter the value of x and wait for 2 minutes')
+    
+            print( Fore.GREEN +'Good Job! Your answer is correct')
+        elif inp == "":
+            print(Fore.MAGENTA+"The correct answer is {}".format(k))
+            speak("The correct answer is {}".format(k))
+            
+        else :
+            #t.cancel()
+            print( Fore.RED + 'Your answer is incorrect')
+            print( Back.BLACK + 'The correct answer is', k)
+            speak("Your answer is incorrect. The correct answer is {} ".format(k))
+    print('You got {} questions right out of 4'.format(scr2))
+    perc2 = int((scr2)/4)*100
+    if perc2 >= 75:
+        print("Which means you scored" + Fore.CYAN + {} + "percentage".format(perc2))
+        print(Fore.GREEN + "WOW !! Nice Score")
+    else:
+        print("You have scored {} percentage".format(perc2))
+        print("We know that you can score better."+ Fore.RED +"You should try again")
+
 
 
 def cg():
@@ -537,8 +504,8 @@ def cg():
             print(Fore.CYAN + "coordinates of point1 are", "(",x1,",",y1,")")
             print( Fore.CYAN + "coordinates of point2 are", "(",x2,",",y2,")")
             print( Back.BLACK +"The line is internally divided in a ratio of m:n where m = {} and n = {}".format(m,n))
-            x3 = int(input('Enter the x coordinate of point '))
-            y3 = int(input('Enter the y coordinate of point '))
+            x3 = pyip.inputInt('Enter the x coordinate of point ')
+            y3 = pyip.inputInt('Enter the y coordinate of point ')
             kaw = floor(lmb(x1,x2,m,n))
             koo = floor(lmb1(y1,y2,m,n))
             t= Timer(120, time_up) #x is amount of allowed time in seconds then execute the provided function
@@ -569,6 +536,12 @@ def cg():
         print("We know that you can score better."+ Fore.RED +"You should try again")
 
 
+def mod_menu():
+     print(Fore.GREEN +BOLD +  '''
+1 {0} Linear Equations
+2 {0} Coordinate Geometry (section formula)
+3 {0} Visualise Equations
+4 {0} Go Back'''.format(emoji.point_right)+color.END)
 
 
 def mod():
@@ -578,11 +551,8 @@ def mod():
     print()
     while True:
         print(Fore.YELLOW + 'Choose one of the following options.')
-        print(Fore.RED + '''1 --> Linear Equations
-         2 --> Coordinate Geometry (section formula)
-         3 --> Visualise Equations
-         4 --> Go Back''')
-        c1 = int(input())
+        mod_menu()
+        c1 = pyip.inputInt("\n")
         if c1 == 1: into()  #; linear()
         if c1 == 2: cg()
         if c1 == 3:
@@ -626,7 +596,7 @@ def calculus():
             speak("Choose the correct option. If you don't know just press enter")
             
 
-            it = input()
+            it = pyip.inputStr("\n")
             if it == "1":
                 annn = op1
             elif it == "":
@@ -684,7 +654,7 @@ def quad():
             dict = {}
             dict = sym.solve([rr],(x))
             print( Back.BLACK + 'equation is', a1,'x^2', '+', '('+str(b1)+')','x', '+', '('+str(co)+')', '=', '0')
-            answer = str(input("Enter the value of x, if i(iota) is coming in the solution then write it as 'I'. If you don't know just press enter : "))
+            answer = pyip.inputStr("Enter the value of x, if i(iota) is coming in the solution then write it as 'I'. If you don't know just press enter : ",blank=True)
             hehe = floor(dict[0][0])
             huh = floor(dict[1][0])
             #t = Timer(5, time_up)
@@ -712,7 +682,11 @@ def quad():
         print("You have scored {} percentage".format(perc5))
         print("We know that you can score better."+ Fore.RED +"You should try again")
 
-
+def adv_menu():
+     print( Fore.GREEN + '''
+1 {0} Calculus
+2 {0} Quadratic Equations
+3 {0} Go Back'''.format(emoji.point_right))
 
 def adv():
     print('There will be a total of 4 questions')
@@ -720,23 +694,24 @@ def adv():
     print('While answering the question enter the closest integer value')
     while True:
         print(Back.BLACK + 'Choose one of the following options')
-        print( Fore.RED + '''1 --> Calculus
-          2 --> Quadratic Equations
-          3 --> Go Back''')  # 2 --> Quadratic Equations;
-        c2 = int(input())
+        adv_menu()
+        c2 = pyip.inputInt("\n")
         if c2 == 1: calculus()
         if c2 == 2: quad()
         elif c2 == 3: break
 
+def evd_menu():
+     print(Fore.GREEN+"""
+1 --> Heights and Distances
+2 --> Compound Interest
+3 --> Go Back""")
 
 def evd():
     print('There will be a total of 4 questions')
     while True :
         print(Back.BLACK + 'Choose one of the following options')
-        print("""1 --> Heights and Distances
-            2 --> Compound Interest
-            3 --> Go Back""")
-        cwfl = int(input())
+        evd_menu()
+        cwfl = pyip.inputInt()
         if cwfl == 1: had()
         if cwfl == 2: ci()
         if cwfl == 3: break
@@ -748,7 +723,7 @@ def evd():
 def into():
     speak("Do you know what an algebric equation is ")
     
-    intro_ques = input("Do you know what an algebric equation is (yes/no): ")
+    intro_ques = pyip.inputYesNo("Do you know what an algebric equation is: ")
     if intro_ques == "yes":
         print( Style.DIM + "Ok then lets directly move to visualsing linear equations")
         visualise_eqn1()
@@ -760,7 +735,7 @@ def into():
         
         speak("Do you know what variables are")
         
-        intro_ques1 = input("Do you know what variables are (yes/no): ")
+        intro_ques1 = pyip.inputYesNo("Do you know what variables are : ")
         if intro_ques1 == "no":
             print( Back.BLACK + """
             In simple terms variables is something whose value can change(or vary).
@@ -786,8 +761,8 @@ def into():
             print("examples of linear equations. :")
             speak("examples of linear equations. ")
    
-            ln_examples = cv2.imread('Types-of-linear-equation.png',1)
-            not_ln_examples = cv2.imread('not-linear-equations.png',1)
+            ln_examples = cv2.imread('./pics/Types-of-linear-equation.png',1)
+            not_ln_examples = cv2.imread('./pics/not-linear-equations.png',1)
 
             cv2.imshow("Types-of-linear-equation",ln_examples)
             k = cv2.waitKey(33)
@@ -809,7 +784,7 @@ def into():
 # examples to be added using image or anything
 
 def img():
-    graph_table = cv2.imread("table.png",1)
+    graph_table = cv2.imread("./pics/table.png",1)
     cv2.imshow("How to get coordinates of linear equation",graph_table)
     k = cv2.waitKey(33)
     print("This table explains, how we have to find coordinates. The window will close automatically after 6 seconds")
@@ -861,8 +836,8 @@ def visualise_eqn2():
     plt.savefig("GRAPH.jpeg")
     time.sleep(2)
     print("If you don't see a graph pop out please check the folder for a file named GRAPH.png")
-    eng.say("If you don't see a graph pop out please check the folder for a file named GRAPH.png")
-    eng.runAndWait()
+    speak("If you don't see a graph pop out please check the folder for a file named GRAPH.png")
+    
 
 
     print(Fore.RED + """
@@ -935,10 +910,9 @@ def time_up():
     r = random.choice(arr)
     print(r)
     speak(r)
-    
 
 def welcome():
-    print(Fore.CYAN+Back.BLACK+
+    print(Fore.CYAN+Back.BLACK+color.BOLD+
 """
 ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
 ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
@@ -946,7 +920,7 @@ def welcome():
 ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝
 ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
  ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
-"""
+"""+color.END
 )
 
 def game_over():
@@ -965,26 +939,26 @@ def game_over():
 )
 
 
+def main_menu():
+    print(Fore.GREEN + '''
+1 {0} Basic Level (VEDIC MATHS)
+2 {0} Moderate Level(6TH -8TH STANDARD)
+3 {0} Advance Level(9TH TO 12TH STANDARD)
+4 {0} Everyday Mathematics
+5 {0} End Game'''.format(emoji.point_right))
 
 
 def main():
     while True:
-        print(Fore.YELLOW + "Choose one of the following options.")
-        print(Fore.RED + '''1 --> Basic Level (VEDIC MATHS)
-        2 --> Moderate Level(6TH -8TH STANDARD)
-        3 --> Advance Level(9TH TO 12TH STANDARD)
-        4 --> Everyday Mathematics
-        5 --> End Game''')
-        c = int(input())
-        if c == 1:
-            basic()
-        if c == 2:
-            mod()
-        if c == 3:
-            adv()
-        if c == 4 : # scr+scr1+scr2+scr3+scr4+scr5 is not working so removed
-            evd()
-        if c == 5
+        print(Fore.YELLOW + color.BOLD +  "Choose one of the following options." + color.END)
+        main_menu()
+        c = pyip.inputInt("\n")
+        if c == 1: basic()
+        if c == 2: mod()
+        if c == 3: adv()
+        # scr+scr1+scr2+scr3+scr4+scr5 is not working so removed 
+        if c == 4 : evd()
+        if c == 5 : 
             print( Fore.RED +  'You have successfully exited the game.')
             speak("exit")
             break
@@ -995,7 +969,7 @@ if __name__ == '__main__':
     eng = pyttsx3.init()  # not making a function
     volume = eng.getProperty('volume')  # volume
     print(Fore.RED + "Your current volume level is:" + str(volume))
-    vol_inp = float(input("We recommend you to set volume to max. Max volume is 1 and minimum is 0 you can choose either of them or you can choose between them using decimal: "))
+    vol_inp = pyip.inputFloat("We recommend you to set volume to max. Max volume is 1 and minimum is 0 you can choose either of them or you can choose between them using decimal: ")
     eng.setProperty('volume', vol_inp)  # max volume is 1.0
     eng.setProperty('rate',132)
     welcome()
