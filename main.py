@@ -13,8 +13,12 @@ from threading import Timer
 from colorama import * 
 import cv2
 import pyinputplus as pyip
+import PySimpleGUI as gui
+
+
 #def story():
 
+print = gui.easy_print
 class emoji:
     point_right = '\U0001F449' 	
     correct = '\u2705'
@@ -48,12 +52,7 @@ def basic_menu():
 4 {0} Go Back
 """.format(emoji.point_right))
         
-def basic_menu2():
-            print(color.Menu + """
-1 {0} Double Digit Multiplication; 
-2 {0} Multiplication of a two-digit number by 11... ; 
-3 {0} Go Back""".format(emoji.point_right))
- 
+
 
 def basic():
     print(color.Imp+ 'This will include questions that are to be solved using Vedic Maths in a given time limit')
@@ -63,8 +62,6 @@ def basic():
     speak('You will have 60 seconds to attempt each question')
     while True: 
         basic_menu()
-        speak('Type one of the following options. 1 Double Digit Multiplication; 2 Multiplication by number of the form 11; 3 Go Back')
-        basic_menu2()
         speak('Type one of the following options. 1 Double Digit Multiplication; 2 Multiplication by number of the form 11; 3 Go Back')
         print( color.Imp +"Choose one of the following options.")
         choice = pyip.inputInt("\n")
