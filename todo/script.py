@@ -1,4 +1,10 @@
 #! /usr/bin/env python3
+"""
+Project: Ganitansh-GUI
+Purpose: Provide interactive E-Education to abled and disabled
+Programmer: HackOlympus
+"""
+
 import PySimpleGUI as gui
 from colorama import *
 import pyttsx3
@@ -9,6 +15,31 @@ Image Element
 layout = [
             [sg.Image(r'C:\PySimpleGUI\Logos\PySimpleGUI_Logo_320.png')],
          ]
+"""
+"""
+def mod_menu() :
+    layout = [
+        [gui.Button("Linear Equations")],
+        [gui.Button("Coordinate Geometery")],
+        [gui.Button("Visualise equations")],
+        [gui.Button("Go Back")],
+    ]
+
+    window = gui.Window("Ganitansh-GUI",layout)
+
+    event, values = window.read()
+    while True  :
+        if event in (gui.WIN_CLOSED,gui.WINDOW_CLOSE_ATTEMPTED_EVENT,"Exit"):
+            window.close()
+            break
+        elif (event == "Linear Equations"):
+            LinearEquations()
+        elif (event == "Coordinate Geometery") :
+            CoordinateGeometery()
+        elif (event == "Visualise equations"):
+            VisualiseEquations()
+        elif (event == "Go Back"):
+            ## goback function
 """
 
 def speak(text):
@@ -59,9 +90,9 @@ class ascii_art:
 # Tip : global variables always capital
 
 gui.theme("Dark black")
-gui.theme_input_text_color("cyan")
-gui.theme_border_width("3")
-gui.theme_text_color("cyan")
+# gui.theme_input_text_color("cyan")
+# gui.theme_border_width("3")
+# gui.theme_text_color("cyan")
 
 USERNAME = ""
 
@@ -81,6 +112,7 @@ def progressBar():
 def Starting():
     LAYOUTOFSTARTING = [
         [gui.Text(ascii_art.main_welcome)],
+        [gui.Text("",key="error")],
         [gui.Text("Hello, Please Introduce yourself to us: ", size=(40, 1), font="SanFrancisco 20")],
         [gui.Text("Enter your name :", size=(20, 1), font="SanFrancisco 16")],
         [gui.InputText(font="SanFrancisco-Bold", text_color="cyan", focus=True)],
@@ -93,9 +125,15 @@ def Starting():
         print(eventOfWinOfStarting, valuesOfWinOfStarting)
         # if valuesOfWinOfStarting[0] == None :
         # error please enter name
+        global USERNAME
+        if valuesOfWinOfStarting[0] != "":
+            USERNAME += valuesOfWinOfStarting[0]
+        else:
+            WINDOWOFSTARTING['error'].update("Please enter name")
+        print("Username is {}".format(USERNAME))
         if  eventOfWinOfStarting in (gui.WIN_CLOSED, 'Exit'):
             break
-        elif (eventOfWinOfStarting == "Next"):
+        elif (eventOfWinOfStarting == "Next") and (USERNAME != None):
             WINDOWOFSTARTING.close()
             MainMenu()
         WINDOWOFSTARTING.close()
@@ -164,6 +202,33 @@ def basiclevelVedicMaths():
         elif (event == "Go Back"):
             MainMenu()
 
+
+def calculator():
+
+    BArgs = {"size":(8,2),"font":("Franklin Gothic Book",10,"bold"),"pad":(0,0),"border_width":0}
+    menu = [
+        ["Modes",["Simple","Advanced","Graphing"]],
+        ["AboutUs"]
+    ]
+    layout = [
+        [gui.Menu(menu)],
+        [gui.Text("Ganitansh Calculator",font=("dejavu","14","bold"),text_color="#0000FF",justification="center",background_color="grey")],
+        [gui.Text("0",font=("Digit-7",20),background_color="#404040",size=(34,2),justification="right",text_color="Red",key="screen",relief="sunken")],
+        [gui.Button("1",**BArgs),gui.Button("2",**BArgs),gui.Button("3",**BArgs),gui.Button("\u00F7",**BArgs),gui.Button("Undo",**BArgs),gui.Button("Clear",button_color="#bd1616",**BArgs)],
+        [gui.Button("4",**BArgs),gui.Button("5",**BArgs),gui.Button("6",**BArgs),gui.Button("x",**BArgs),gui.Button("(",**BArgs),gui.Button(")",**BArgs)],
+        [gui.Button("7",**BArgs),gui.Button("8",**BArgs),gui.Button("9",**BArgs),gui.Button("-",**BArgs),gui.Button(button_text="x"+ "\u00B2",key="square",**BArgs),gui.Button("\u221A",**BArgs)],
+        [gui.Button("0",**BArgs),gui.Button(".",**BArgs),gui.Button("%",**BArgs),gui.Button("+",**BArgs),gui.Button("Enter",size=(19,2),font=("Franklin Gothic Book",10,"bold"),pad=(0,0))],
+    ]
+
+    window = gui.Window("Ganitansh-Calculator",layout,background_color="grey",return_keyboard_events=True) #23252e
+    while True:
+        event, values = window.read()
+        print(event,values)
+        if event in (gui.WIN_CLOSED,gui.WINDOW_CLOSE_ATTEMPTED_EVENT,"Exit"):
+            break
+
+
+    window.close()
 # def DoubleDigitMultiplication():
 
 
@@ -180,33 +245,20 @@ def mod_menu():
 
 
 
-# def mod_menu() :
-#     layout = [
-#         [gui.Button("Linear Equations")],
-#         [gui.Button("Coordinate Geometery")],
-#         [gui.Button("Visualise equations")],
-#         [gui.Button("Go Back")],
-#     ]
-#
-#     window = gui.Window("Ganitansh-GUI",layout)
-#
-#     event, values = window.read()
-#     while True  :
-#         if event in (gui.WIN_CLOSED,gui.WINDOW_CLOSE_ATTEMPTED_EVENT,"Exit"):
-#             window.close()
-#             break
-#         elif (event == "Linear Equations"):
-#             LinearEquations()
-#         elif (event == "Coordinate Geometery") :
-#             CoordinateGeometery()
-#         elif (event == "Visualise equations"):
-#             VisualiseEquations()
-#         elif (event == "Go Back"):
-            ### goback function
+
+
+
+def GraphingCalc():
+    layout = [
+        [gui.Text("Plot Equations",justification="center",text_color="Red")]
+    ]
+    window = gui.Window("Ganitansh-GUI",layout)
+    event, values = window.read()
 
 def main():
+    calculator()
     init()
-    Starting()
+    # Starting()
 
 if __name__ == '__main__':
     main()
