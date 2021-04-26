@@ -9,6 +9,7 @@ import PySimpleGUI as gui
 from colorama import *
 import pyttsx3
 from matplotlib import pyplot as plt
+import math
 
 """
 Image Element
@@ -19,9 +20,9 @@ layout = [
 """
 def mod_menu() :
     layout = [
-        [gui.Button("Linear Equations")],
+        [gui.Button("Linear EQUATIONs")],
         [gui.Button("Coordinate Geometery")],
-        [gui.Button("Visualise equations")],
+        [gui.Button("Visualise EQUATIONs")],
         [gui.Button("Go Back")],
     ]
 
@@ -32,12 +33,12 @@ def mod_menu() :
         if event in (gui.WIN_CLOSED,gui.WINDOW_CLOSE_ATTEMPTED_EVENT,"Exit"):
             window.close()
             break
-        elif (event == "Linear Equations"):
-            LinearEquations()
+        elif (event == "Linear EQUATIONs"):
+            LinearEQUATIONs()
         elif (event == "Coordinate Geometery") :
             CoordinateGeometery()
-        elif (event == "Visualise equations"):
-            VisualiseEquations()
+        elif (event == "Visualise EQUATIONs"):
+            VisualiseEQUATIONs()
         elif (event == "Go Back"):
             ## goback function
 """
@@ -142,16 +143,17 @@ def Starting():
 def MainMenu():
     LAYOUTOFMENU = [
 
-        [gui.Text("Main Menu", font="SanFrancisco-Bold  20", justification="centre")],
-        [gui.Button("\t\t\tBasic Level (VEDIC MATHS)\t\t\t",key="Basic Level (VEDIC MATHS)")],
-        [gui.Button("\t\t\tModerate Level(6TH -8TH STANDARD)\t\t\t",key="Moderate Level(6TH -8TH STANDARD")],
-        [gui.Button("\t\t\tAdvance Level(9TH TO 12TH STANDARD)\t\t\t",key="Advance Level(9TH TO 12TH STANDARD)")],
-        [gui.Button("\t\t\tEveryday Mathematics\t\t\t",key="Everyday Mathematics")],
+        [gui.Text("\t   Main Menu", font="SanFrancisco-Bold  20", justification="centre")],
+        [gui.Button("\t\t\tBasic Level (VEDIC MATHS)\t\t\t",key="Basic Level (VEDIC MATHS)",size=(70,2),font=("Helvetica"))],
+        [gui.Button("\t\t\tModerate Level(6TH -8TH STANDARD)\t\t\t",key="Moderate Level(6TH -8TH STANDARD",size=(70,2),font=("Helvetica"))],
+        [gui.Button("\t\t\tAdvance Level(9TH TO 12TH STANDARD)\t\t\t",key="Advance Level(9TH TO 12TH STANDARD)",size=(70,2),font=("Helvetica"))],
+        [gui.Button("\t\t\tEveryday Mathematics\t\t\t",key="Everyday Mathematics",size=(70,2),font=("Helvetica"))],
         [gui.Exit()]
 
     ]
 
-    WINDOWOFMENU = gui.Window("Ganitansh-GUI", LAYOUTOFMENU, enable_close_attempted_event=True, size=(500, 500),
+    WINDOWOFMENU = gui.Window("Ganitansh-GUI", LAYOUTOFMENU,
+                              enable_close_attempted_event=True, size=(500, 500),
                               modal=True)
 
     while True:
@@ -179,9 +181,9 @@ def MainMenu():
     WINDOWOFMENU.close()
 def basiclevelVedicMaths():
     layout = [
-        [gui.Text("These questions will help you build your speed in calculation",font="SanFrancisco-Bold 12",text_color="cyan")],
+        [gui.Text("\t\tBasic Math Menu",font="SanFrancisco-Bold 12",text_color="cyan",justification="center")],
         [gui.Button("Double Digit Multiplication",font="SanFrancisco-Bold 12")],
-        [gui.Button("Multiplication of a two-digit number by 11...",font="SanFrancisco-Bold 12")],
+        [gui.Button("Multiplication of a two-digit number by 11",font="SanFrancisco-Bold 12")],
         [gui.Button("Finding square of double digit numbers ending with 5",font="SanFrancisco-Bold 12")],
         [gui.Button("Go Back",font="SanFrancisco-Bold 12")]
 
@@ -210,23 +212,78 @@ def calculator():
         ["Modes",["Simple","Advanced","Graphing"]],
         ["AboutUs"]
     ]
+
+    key_scheme = ["1","2","3","4","5","6","7","8","9","0","(",")","-","+",".",'\u00F7']
+
     layout = [
         [gui.Menu(menu)],
         [gui.Text("Ganitansh Calculator",font=("dejavu","14","bold"),text_color="#0000FF",justification="center",background_color="grey")],
-        [gui.Text("0",font=("Digit-7",20),background_color="#404040",size=(34,2),justification="right",text_color="Red",key="screen",relief="sunken")],
+        [gui.Text("0",font=("Digit-7",20),background_color="#404040",size=(34,2),justification="right",text_color="Red",key="SCREEN",relief="sunken")],
         [gui.Button("1",**BArgs),gui.Button("2",**BArgs),gui.Button("3",**BArgs),gui.Button("\u00F7",**BArgs),gui.Button("Undo",**BArgs),gui.Button("Clear",button_color="#bd1616",**BArgs)],
         [gui.Button("4",**BArgs),gui.Button("5",**BArgs),gui.Button("6",**BArgs),gui.Button("x",**BArgs),gui.Button("(",**BArgs),gui.Button(")",**BArgs)],
-        [gui.Button("7",**BArgs),gui.Button("8",**BArgs),gui.Button("9",**BArgs),gui.Button("-",**BArgs),gui.Button(button_text="x"+ "\u00B2",key="square",**BArgs),gui.Button("\u221A",**BArgs)],
+        [gui.Button("7",**BArgs),gui.Button("8",**BArgs),gui.Button("9",**BArgs),gui.Button("-",**BArgs),gui.Button(button_text="X"+ "\u00B2",**BArgs),gui.Button("\u221A",**BArgs)],
         [gui.Button("0",**BArgs),gui.Button(".",**BArgs),gui.Button("%",**BArgs),gui.Button("+",**BArgs),gui.Button("Enter",size=(19,2),font=("Franklin Gothic Book",10,"bold"),pad=(0,0))],
     ]
 
+    SCREEN = ""
+    EQUATION = []
+
     window = gui.Window("Ganitansh-Calculator",layout,background_color="grey",return_keyboard_events=True) #23252e
+
     while True:
         event, values = window.read()
         print(event,values)
         if event in (gui.WIN_CLOSED,gui.WINDOW_CLOSE_ATTEMPTED_EVENT,"Exit"):
+            print("event = ",event)
             break
-
+        elif event in key_scheme :
+            if event == "\u00F7" :
+                SCREEN += event
+                EQUATION.append("/")
+                window['SCREEN'].update(SCREEN)
+                print("equation = ",EQUATION)
+            else:
+                print(event)
+                SCREEN += event
+                EQUATION.append(event)
+                window['SCREEN'].update(SCREEN)
+                print(EQUATION)
+        # square
+        elif event == "X"+"\u00B2" :
+            SCREEN += "\u00B2"
+            EQUATION.append("**2")
+            window['SCREEN'].update(SCREEN)
+            print(EQUATION)
+        elif event == "x" :
+            SCREEN += event
+            EQUATION.append("*")
+            window['SCREEN'].update(SCREEN)
+            print(EQUATION)
+        elif event == "\u221A" :
+            SCREEN += event
+            EQUATION.append(math.sqrt())
+            print(EQUATION)
+        elif event == "%" :
+            SCREEN += event
+            EQUATION.append("{}/100".format(EQUATION[len(EQUATION)-1]))
+            window['SCREEN'].update(SCREEN)
+        elif event == "Clear" :
+            window['SCREEN'].update("0")
+            SCREEN = ""
+            EQUATION = []
+        elif event == "Undo" :
+            SCREEN = SCREEN[0:len(SCREEN)-1]
+            EQUATION.pop()
+            print(EQUATION)
+            window['SCREEN'].update(SCREEN)
+        elif event == "Enter" :
+            try :
+                result = eval("".join(EQUATION))
+                EQUATION = str(result)
+                SCREEN = str(result)
+                window['SCREEN'].update(SCREEN)
+            except ZeroDivisionError :
+                window['SCREEN'].update("Error")
 
     window.close()
 # def DoubleDigitMultiplication():
@@ -238,9 +295,9 @@ def calculator():
 
 def mod_menu():
     print(Fore.GREEN + BOLD + '''
-1 {0} Linear Equations
+1 {0} Linear equations
 2 {0} Coordinate Geometry (section formula)
-3 {0} Visualise Equations
+3 {0} Visualise equations
 4 {0} Go Back'''.format(emoji.point_right) + color.END)
 
 
@@ -250,7 +307,7 @@ def mod_menu():
 
 def GraphingCalc():
     layout = [
-        [gui.Text("Plot Equations",justification="center",text_color="Red")]
+        [gui.Text("Plot equations",justification="center",text_color="Red")]
     ]
     window = gui.Window("Ganitansh-GUI",layout)
     event, values = window.read()
@@ -258,7 +315,7 @@ def GraphingCalc():
 def main():
     calculator()
     init()
-    # Starting()
+    #Starting()
 
 if __name__ == '__main__':
     main()

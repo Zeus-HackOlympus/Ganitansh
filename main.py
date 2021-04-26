@@ -18,7 +18,7 @@ import PySimpleGUI as gui
 
 #def story():
 
-print = gui.easy_print
+# print = gui.easy_print
 class emoji:
     point_right = '\U0001F449' 	
     correct = '\u2705'
