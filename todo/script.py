@@ -14,7 +14,7 @@ import math
 """
 Image Element
 layout = [
-            [sg.Image(r'C:\PySimpleGUI\Logos\PySimpleGUI_Logo_320.png')],
+            [gui.Image(r'C:\PySimpleGUI\Logos\PySimpleGUI_Logo_320.png')],
          ]
 """
 """
@@ -98,14 +98,14 @@ gui.theme("Dark black")
 USERNAME = ""
 
 def progressBar():
-    layout = [[sg.Text('A custom progress meter')],
-              [sg.ProgressBar(1000, orientation='h', size=(20, 20), key='progressbar')],
-              [sg.Cancel()]]
-    window = sg.Window('Custom Progress Meter', layout)
+    layout = [[gui.Text('A custom progress meter')],
+              [gui.ProgressBar(1000, orientation='h', size=(20, 20), key='progressbar')],
+              [gui.Cancel()]]
+    window = gui.Window('Custom Progress Meter', layout)
     progress_bar = window['progressbar']
     for i in range(1000):
         event, values = window.read(timeout=10)
-        if event == 'Cancel' or event == sg.WIN_CLOSED:
+        if event == 'Cancel' or event == gui.WIN_CLOSED:
             break
         progress_bar.UpdateBar(i + 1)
     window.close()
@@ -206,6 +206,41 @@ def basiclevelVedicMaths():
 
 
 def calculator():
+    def check(a: list):
+        l = a.copy()
+        symbols = "! % * ( ) - + / . **(1/2)".split()
+        for i in range(len(a)):
+            try:
+                if a[i] in symbols and a[i + 1] in symbols:
+                    pass
+                elif (a[i] in symbols) and (type(eval(a[i + 1]))) in (int, float):
+                    if a[i] == ")":
+                        l.insert(i + 1, "*")
+                elif type(eval(a[i])) in (int, float) and (a[i + 1] in symbols):
+                    if a[i + 1] == "(":
+                        l.insert(i + 1, "*")
+            except IndexError:
+                break
+        return l
+
+    def sqrt(a: list):
+        test = a.copy()
+        symbols = "! % * ( ) - + / .".split()
+        for i in range(len(a)):
+            if a[i] == "**(1/2)" and a[i + 1] not in symbols:
+                if type(eval(a[i + 1])) in (int, float):
+                    test.insert(i, a[i + 1])
+                    test.pop(i + 2)
+            elif a[i] == "**(1/2)":
+                if a[i + 1] == "(":
+                    while a[i + 1] != ")":
+                        test.insert(i, a[i + 1])
+                        test.pop(i + 2)
+                        i += 1
+                if a[i + 1] == ")":
+                    test.insert(i, a[i + 1])
+                    test.pop(i + 2)
+        return test
 
     BArgs = {"size":(8,2),"font":("Franklin Gothic Book",10,"bold"),"pad":(0,0),"border_width":0}
     menu = [
@@ -213,16 +248,23 @@ def calculator():
         ["AboutUs"]
     ]
 
-    key_scheme = ["1","2","3","4","5","6","7","8","9","0","(",")","-","+",".",'\u00F7']
+    key_scheme = ["1","2","3","4","5","6","7","8","9","0",
+                  "(",")","-","+","."]
+    keyboard = ["1:10","2:11","3:12",
+                "4:13","5:14","6:15",
+                "7:16","8:17","9:18",
+                "0:19","parenleft:18",
+                "parenright:19","minus:20","plus:21",
+                "period:60","percent:14","asciicircum:15"]
 
     layout = [
         [gui.Menu(menu)],
-        [gui.Text("Ganitansh Calculator",font=("dejavu","14","bold"),text_color="#0000FF",justification="center",background_color="grey")],
-        [gui.Text("0",font=("Digit-7",20),background_color="#404040",size=(34,2),justification="right",text_color="Red",key="SCREEN",relief="sunken")],
+        [gui.Text("Ganitansh Calculator",font=("dejavu","14","bold"),text_color="lime",justification="center",background_color="grey")],
+        [gui.Text("0",font=("digital-7",30),background_color="#404040",size=(32,3),justification="right",text_color="Red",key="SCREEN",relief="sunken")],
         [gui.Button("1",**BArgs),gui.Button("2",**BArgs),gui.Button("3",**BArgs),gui.Button("\u00F7",**BArgs),gui.Button("Undo",**BArgs),gui.Button("Clear",button_color="#bd1616",**BArgs)],
         [gui.Button("4",**BArgs),gui.Button("5",**BArgs),gui.Button("6",**BArgs),gui.Button("x",**BArgs),gui.Button("(",**BArgs),gui.Button(")",**BArgs)],
-        [gui.Button("7",**BArgs),gui.Button("8",**BArgs),gui.Button("9",**BArgs),gui.Button("-",**BArgs),gui.Button(button_text="X"+ "\u00B2",**BArgs),gui.Button("\u221A",**BArgs)],
-        [gui.Button("0",**BArgs),gui.Button(".",**BArgs),gui.Button("%",**BArgs),gui.Button("+",**BArgs),gui.Button("Enter",size=(19,2),font=("Franklin Gothic Book",10,"bold"),pad=(0,0))],
+        [gui.Button("7",**BArgs),gui.Button("8",**BArgs),gui.Button("9",**BArgs),gui.Button("-",**BArgs),gui.Button(button_text="x"+ "\u00B2",**BArgs),gui.Button("\u221A",**BArgs)],
+        [gui.Button("0",**BArgs),gui.Button(".",**BArgs),gui.Button("%",**BArgs),gui.Button("+",**BArgs),gui.Button("Enter",size=(19,2),font=("Franklin Gothic Book",10,"bold"),pad=(0,0),button_color="#0066FF")],
     ]
 
     SCREEN = ""
@@ -236,54 +278,183 @@ def calculator():
         if event in (gui.WIN_CLOSED,gui.WINDOW_CLOSE_ATTEMPTED_EVENT,"Exit"):
             print("event = ",event)
             break
-        elif event in key_scheme :
-            if event == "\u00F7" :
-                SCREEN += event
-                EQUATION.append("/")
+        elif event == "Advanced" :
+            AdvancedCalculator()
+        elif event == "Graphing" :
+            GraphingCalc()
+        elif (event in keyboard) and (event != "asciicircum:15"):
+            if (event in keyboard) and (event == "percent:14"):
+                SCREEN += "%"
+                EQUATION.append("{}/100".format(EQUATION[len(EQUATION) - 1]))
                 window['SCREEN'].update(SCREEN)
                 print("equation = ",EQUATION)
+                print("event = ", event)
             else:
-                print(event)
-                SCREEN += event
-                EQUATION.append(event)
-                window['SCREEN'].update(SCREEN)
-                print(EQUATION)
+                if event in keyboard :
+                    event = key_scheme[keyboard.index(event)]
+                    SCREEN += event
+                    EQUATION.append(event)
+                    window['SCREEN'].update(SCREEN)
+                    print("equation = ", EQUATION)
+                    print("event = ", event)
+        elif (event in key_scheme) :
+            SCREEN += event
+            EQUATION.append(event)
+            window['SCREEN'].update(SCREEN)
+            print("equation = ",EQUATION)
+            print("event = ",event)
+
+        elif event in ("\u00F7", "slash:61"):
+            SCREEN += "\u00F7"
+            EQUATION.append("/")
+            window['SCREEN'].update(SCREEN)
+            print("equation = ", EQUATION)
+            print("event = ", event)
+
+
         # square
-        elif event == "X"+"\u00B2" :
+        elif event in ("X"+"\u00B2","asciicircum:15") :
             SCREEN += "\u00B2"
             EQUATION.append("**2")
             window['SCREEN'].update(SCREEN)
-            print(EQUATION)
-        elif event == "x" :
-            SCREEN += event
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event in ("x","KP_Multiply:63","asterisk:17") :
+            SCREEN += "x"
             EQUATION.append("*")
             window['SCREEN'].update(SCREEN)
-            print(EQUATION)
+            print("equation = ", EQUATION)
+            print("event = ", event)
         elif event == "\u221A" :
             SCREEN += event
-            EQUATION.append(math.sqrt())
-            print(EQUATION)
-        elif event == "%" :
-            SCREEN += event
-            EQUATION.append("{}/100".format(EQUATION[len(EQUATION)-1]))
+            EQUATION.append("**(1/2)")
             window['SCREEN'].update(SCREEN)
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_End:87" :
+            SCREEN += "1"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("1")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Delete:91" :
+            SCREEN += "."
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append(".")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Left:83" :
+            SCREEN += "4"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("4")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Home:79" :
+            SCREEN += "7"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("7")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Up:80" :
+            SCREEN += "8"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("8")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Prior:81" :
+            SCREEN += "9"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("9")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Begin:84" :
+            SCREEN += "5"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("5")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Right:85" :
+            SCREEN += "6"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("6")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Next:89" :
+            SCREEN += "3"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("3")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Down:88" :
+            SCREEN += "2"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("2")
+            print("equation = ", EQUATION)
+            print("event = ", event)
         elif event == "Clear" :
             window['SCREEN'].update("0")
             SCREEN = ""
             EQUATION = []
-        elif event == "Undo" :
-            SCREEN = SCREEN[0:len(SCREEN)-1]
-            EQUATION.pop()
-            print(EQUATION)
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Add:86" :
+            print(event)
+            SCREEN += "+"
+            EQUATION.append("+")
             window['SCREEN'].update(SCREEN)
-        elif event == "Enter" :
-            try :
-                result = eval("".join(EQUATION))
-                EQUATION = str(result)
-                SCREEN = str(result)
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Add:86" :
+            SCREEN += "+"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("+")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Subtract:82" :
+            SCREEN += "-"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("-")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Multiply:63" :
+            SCREEN += "*"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("*")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event == "KP_Divide:106" :
+            SCREEN += "\u00F7"
+            window['SCREEN'].update(SCREEN)
+            EQUATION.append("/")
+            print("equation = ", EQUATION)
+            print("event = ", event)
+        elif event in ("Undo","BackSpace:22") :
+            try:
+                SCREEN = SCREEN[0:len(SCREEN)-1]
+                EQUATION.pop()
+                print(EQUATION)
                 window['SCREEN'].update(SCREEN)
+                print("equation = ",EQUATION)
+                print("event = ", event)
+            except:
+                pass
+        elif event in ("Enter","Return:36","KP_Enter:104","equal:21") :
+            try :
+                EQUATION = check(EQUATION)
+                print("after check = ", EQUATION)
+                EQUATION = sqrt(EQUATION)
+                print("after sqrt = ",EQUATION)
+                result = eval("".join(EQUATION))
+                print("result = ",result)
+                EQUATION = [str(result)]
+                SCREEN = str(float(result))
+                window['SCREEN'].update(SCREEN.format(".10f"))
+                print("equation = ",EQUATION)
+                print("event = ", event)
             except ZeroDivisionError :
                 window['SCREEN'].update("Error")
+            except SyntaxError :
+                pass
 
     window.close()
 # def DoubleDigitMultiplication():
