@@ -206,46 +206,13 @@ def basiclevelVedicMaths():
 
 
 def calculator():
-    def check(a: list):
-        l = a.copy()
-        symbols = "! % * ( ) - + / . **(1/2)".split()
-        for i in range(len(a)):
-            try:
-                if a[i] in symbols and a[i + 1] in symbols:
-                    pass
-                elif (a[i] in symbols) and (type(eval(a[i + 1]))) in (int, float):
-                    if a[i] == ")":
-                        l.insert(i + 1, "*")
-                elif type(eval(a[i])) in (int, float) and (a[i + 1] in symbols):
-                    if a[i + 1] == "(":
-                        l.insert(i + 1, "*")
-            except IndexError:
-                break
-        return l
 
-    def sqrt(a: list):
-        test = a.copy()
-        symbols = "! % * ( ) - + / .".split()
-        for i in range(len(a)):
-            if a[i] == "**(1/2)" and a[i + 1] not in symbols:
-                if type(eval(a[i + 1])) in (int, float):
-                    test.insert(i, a[i + 1])
-                    test.pop(i + 2)
-            elif a[i] == "**(1/2)":
-                if a[i + 1] == "(":
-                    while a[i + 1] != ")":
-                        test.insert(i, a[i + 1])
-                        test.pop(i + 2)
-                        i += 1
-                if a[i + 1] == ")":
-                    test.insert(i, a[i + 1])
-                    test.pop(i + 2)
-        return test
 
     BArgs = {"size":(8,2),"font":("Franklin Gothic Book",10,"bold"),"pad":(0,0),"border_width":0}
     menu = [
         ["Modes",["Simple","Advanced","Graphing"]],
-        ["AboutUs"]
+        ["AboutUs",["About..."]],
+        ["Help",["Guide Fo.."] ]
     ]
 
     key_scheme = ["1","2","3","4","5","6","7","8","9","0",
@@ -263,7 +230,7 @@ def calculator():
         [gui.Text("0",font=("digital-7",30),background_color="#404040",size=(32,3),justification="right",text_color="Red",key="SCREEN",relief="sunken")],
         [gui.Button("1",**BArgs),gui.Button("2",**BArgs),gui.Button("3",**BArgs),gui.Button("\u00F7",**BArgs),gui.Button("Undo",**BArgs),gui.Button("Clear",button_color="#bd1616",**BArgs)],
         [gui.Button("4",**BArgs),gui.Button("5",**BArgs),gui.Button("6",**BArgs),gui.Button("x",**BArgs),gui.Button("(",**BArgs),gui.Button(")",**BArgs)],
-        [gui.Button("7",**BArgs),gui.Button("8",**BArgs),gui.Button("9",**BArgs),gui.Button("-",**BArgs),gui.Button(button_text="x"+ "\u00B2",**BArgs),gui.Button("\u221A",**BArgs)],
+        [gui.Button("7",**BArgs),gui.Button("8",**BArgs),gui.Button("9",**BArgs),gui.Button("-",**BArgs),gui.Button(button_text="x"+ "\u00B2",**BArgs),gui.Button("\u221A",**BArgs,key="\u221A"+"(")],
         [gui.Button("0",**BArgs),gui.Button(".",**BArgs),gui.Button("%",**BArgs),gui.Button("+",**BArgs),gui.Button("Enter",size=(19,2),font=("Franklin Gothic Book",10,"bold"),pad=(0,0),button_color="#0066FF")],
     ]
 
@@ -313,7 +280,7 @@ def calculator():
 
 
         # square
-        elif event in ("X"+"\u00B2","asciicircum:15") :
+        elif event in ("x"+"\u00B2","asciicircum:15") :
             SCREEN += "\u00B2"
             EQUATION.append("**2")
             window['SCREEN'].update(SCREEN)
@@ -325,9 +292,10 @@ def calculator():
             window['SCREEN'].update(SCREEN)
             print("equation = ", EQUATION)
             print("event = ", event)
-        elif event == "\u221A" :
-            SCREEN += event
-            EQUATION.append("**(1/2)")
+        # square root
+        elif event == "\u221A" + "(" :
+            SCREEN +=  event
+            EQUATION.append("math.sqrt(")
             window['SCREEN'].update(SCREEN)
             print("equation = ", EQUATION)
             print("event = ", event)
@@ -440,10 +408,6 @@ def calculator():
                 pass
         elif event in ("Enter","Return:36","KP_Enter:104","equal:21") :
             try :
-                EQUATION = check(EQUATION)
-                print("after check = ", EQUATION)
-                EQUATION = sqrt(EQUATION)
-                print("after sqrt = ",EQUATION)
                 result = eval("".join(EQUATION))
                 print("result = ",result)
                 EQUATION = [str(result)]
@@ -457,23 +421,47 @@ def calculator():
                 pass
 
     window.close()
-# def DoubleDigitMultiplication():
+# def DoubleDigitMultiplication():  TODO
+# def MultiplicationOfa2DigitNumber(): TODO
+# def SquareOfDoubleDigitEndingWith5(): TODO
+
+def calculator_help() :
+    def menu() :
+        frame = [
+            #[gui.Text("Calculator Help Menu")],
+            [gui.Button("Simple Mode Help")],
+            [gui.Button("Advanced Mode Help")],
+            [gui.Button("Graphing Mode")]
+        ]
+        layout = [
+            gui.Frame("Calculator Help Menu",layout=frame)
+        ]
+
+        window = gui.Window("Ganitansh-GUI",layout)
+        while True :
+            event, values = window.read()
+            print(event,values)
+            # if event ==
+
+    menu()
 
 
-# def MultiplicationOfa2DigitNumber():
-
-# def SquareOfDoubleDigitEndingWith5():
-
-def mod_menu():
-    print(Fore.GREEN + BOLD + '''
-1 {0} Linear equations
-2 {0} Coordinate Geometry (section formula)
-3 {0} Visualise equations
-4 {0} Go Back'''.format(emoji.point_right) + color.END)
 
 
+def mod_menu() :
+    layout = [
+        [gui.Button("{} Linear Equations".format(emoji.point_right)) ] ,
+        [gui.Button("{} Coordinate Geometery".format(emoji.point_right))],
+        [gui.Button("{} Visualise Equations".format(emoji.point_right))],
+        [gui.Button("{} Go Back".format(emoji.point_right))]
+    ]
+    window = gui.Window("Ganitansh Moderate Menu",layout)
 
-
+    while True :
+        events, values = window.read()
+        if events in  ("Exit",gui.WIN_CLOSE_ATTEMPTED_EVENT,gui.WIN_CLOSED) :
+            break
+    window.close()
 
 
 def GraphingCalc():
@@ -484,9 +472,9 @@ def GraphingCalc():
     event, values = window.read()
 
 def main():
-    calculator()
+    calculator_help()
     init()
-    #Starting()
+    Starting()
 
 if __name__ == '__main__':
     main()
